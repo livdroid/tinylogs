@@ -1,20 +1,20 @@
-# TinyLogs 📝
+# TinyLogs
 
-Un package Flutter simple et rapide pour logger des informations dans une base de données SQLite locale avec gestion automatique de l'historique.
+A simple and efficient Flutter package for logging information to a local SQLite database with automatic history management.
 
-## Caractéristiques
+## Features
 
-- **Stockage local** : Utilise SQLite via sqflite
-- **Gestion automatique** : Nettoyage automatique des anciens logs
-- **Recherche flexible** : Récupération de logs par plage de dates ou autour d'une date précise
-- **Multi-plateforme** : Supporte iOS, Android, macOS (et autres plateformes compatibles avec sqflite)
-- **Testé** : Plus de 95% de couverture de tests
+- **Local storage**: Uses SQLite via sqflite
+- **Automatic management**: Automatic cleanup of old logs
+- **Flexible search**: Retrieve logs by date range or around a specific date
+- **Cross-platform**: Supports iOS, Android, macOS (and other platforms compatible with sqflite)
+- **Tested**: Over 95% test coverage
 
-## Utilisation de base
+## Basic Usage
 
-### Initialisation
+### Initialization
 
-Initialisez TinyLogs au démarrage de votre application :
+Initialize TinyLogs at application startup:
 
 ```dart
 import 'package:tinylogs/tinylogs.dart';
@@ -22,34 +22,34 @@ import 'package:tinylogs/tinylogs.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialisation avec configuration par défaut (7 jours de rétention)
+  // Initialize with default configuration (7 days retention)
   await TinyLogs.instance.init();
   
   runApp(MyApp());
 }
 ```
 
-### Configuration personnalisée
+### Custom Configuration
 
-Vous pouvez personnaliser la durée de rétention des logs et le nom de la base de données :
+You can customize the log retention duration and database name:
 
 ```dart
 await TinyLogs.instance.init(
   const TinyLogsConfig(
-    retentionDuration: Duration(days: 30), // Garde les logs pendant 30 jours
-    databaseName: 'my_app_logs.db',       // Nom personnalisé de la DB
+    retentionDuration: Duration(days: 30), // Keep logs for 30 days
+    databaseName: 'my_app_logs.db',       // Custom database name
   ),
 );
 ```
 
-### Enregistrer un log
+### Recording a Log
 
 ```dart
-await TinyLogs.instance.log('Utilisateur connecté');
-await TinyLogs.instance.log('Erreur lors du chargement des données');
+await TinyLogs.instance.log('User logged in');
+await TinyLogs.instance.log('Error loading data');
 ```
 
-### Récupérer tous les logs
+### Retrieving All Logs
 
 ```dart
 final logs = await TinyLogs.instance.getAllLogs();
@@ -59,7 +59,7 @@ for (final log in logs) {
 }
 ```
 
-### Récupérer les logs dans une plage de dates
+### Retrieving Logs in a Date Range
 
 ```dart
 final now = DateTime.now();
@@ -68,53 +68,53 @@ final yesterday = now.subtract(Duration(days: 1));
 final logs = await TinyLogs.instance.getLogsInRange(yesterday, now);
 ```
 
-### Récupérer les logs autour d'une date précise
+### Retrieving Logs Around a Specific Date
 
-Par défaut, récupère les logs ±12 heures autour de la date :
+By default, retrieves logs within 12 hours before and after the specified date:
 
 ```dart
 final specificTime = DateTime(2024, 10, 15, 14, 30);
 final logs = await TinyLogs.instance.getLogsAround(specificTime);
 ```
 
-Vous pouvez personnaliser la marge :
+You can customize the margin:
 
 ```dart
 final logs = await TinyLogs.instance.getLogsAround(
   specificTime,
-  margin: Duration(hours: 6), // ±6 heures
+  margin: Duration(hours: 6), // ±6 hours
 );
 ```
 
-### Nettoyer les anciens logs
+### Cleaning Up Old Logs
 
-Le nettoyage est automatique au démarrage, mais vous pouvez aussi le faire manuellement :
+Cleanup is automatic at startup, but you can also trigger it manually:
 
 ```dart
 final deletedCount = await TinyLogs.instance.cleanupOldLogs();
-print('$deletedCount anciens logs supprimés');
+print('$deletedCount old logs deleted');
 ```
 
-### Compter les logs
+### Counting Logs
 
 ```dart
 final count = await TinyLogs.instance.getLogCount();
-print('Nombre total de logs : $count');
+print('Total number of logs: $count');
 ```
 
-### Supprimer tous les logs
+### Deleting All Logs
 
 ```dart
 await TinyLogs.instance.clearAllLogs();
 ```
 
-## Modèle de données
+## Data Model
 
-Chaque log contient :
+Each log contains:
 
-- `id` : Identifiant unique auto-généré (int)
-- `timestamp` : Horodatage en millisecondes depuis l'epoch (int)
-- `content` : Contenu du log (String, non null)
+- `id`: Auto-generated unique identifier (int)
+- `timestamp`: Timestamp in milliseconds since epoch (int)
+- `content`: Log content (String, non-null)
 
 ```dart
 class LogEntry {
@@ -122,7 +122,7 @@ class LogEntry {
   final int timestamp;
   final String content;
   
-  DateTime get dateTime; // Conversion automatique du timestamp
+  DateTime get dateTime; // Automatic timestamp conversion
 }
 ```
 
@@ -132,28 +132,28 @@ class LogEntry {
 
 ```dart
 const TinyLogsConfig({
-  Duration retentionDuration = const Duration(days: 7),  // Durée de conservation
-  String databaseName = 'tinylogs.db',                   // Nom de la base de données
+  Duration retentionDuration = const Duration(days: 7),  // Retention duration
+  String databaseName = 'tinylogs.db',                   // Database name
 });
 ```
 
-## Exemple complet
+## Complete Example
 
-Consultez le dossier [`example/`](example/) pour une application complète démontrant toutes les fonctionnalités.
+See the [`example/`](example/) folder for a complete application demonstrating all features.
 
-Pour exécuter l'exemple :
+To run the example:
 
 ```bash
 cd example
 flutter run
 ```
 
-## Plateforme supportées
+## Supported Platforms
 
-- ✅ iOS
-- ✅ Android
-- ✅ macOS
+- iOS
+- Android
+- macOS
 
-## Licence
+## License
 
-Ce projet est sous licence BSD-2-Clause. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+This project is licensed under the BSD-2-Clause License. See the [LICENSE](LICENSE) file for details.
