@@ -68,8 +68,6 @@ class TinyLogs {
 
     final logEntry = LogEntry.now(content);
     final id = await _databaseHelper.insertLog(logEntry);
-
-    debugPrint('TinyLogs: Log enregistré (id: $id)');
     return id;
   }
 
