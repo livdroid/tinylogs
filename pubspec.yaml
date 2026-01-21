@@ -1,20 +1,22 @@
 name: tinylogs
-description: Un package Flutter simple et rapide pour logger des informations dans une base de données SQLite locale avec gestion automatique de l'historique.
-version: 1.0.0
-homepage: https://github.com/oliviarodriguewinminute/tinylogs
+description: A simple and efficient Flutter package for logging information to a local SQLite database with automatic history management.
+version: 2.0.0
+homepage: https://github.com/livdroid/tinylogs
+repository: https://github.com/livdroid/tinylogs
+issue_tracker: https://github.com/livdroid/tinylogs/issues
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.0.0"
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  sqflite: ^2.3.2
-  path: ^1.8.0
+  sqflite: ^2.4.1
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
-  sqflite_common_ffi: ^2.3.0
+  flutter_lints: ^5.0.0
+  sqflite_common_ffi: ^2.3.4

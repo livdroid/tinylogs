@@ -1,18 +1,23 @@
-/// Configuration pour TinyLogs
+/// Configuration for TinyLogs
 class TinyLogsConfig {
-  /// Durée de conservation des logs (par défaut: 7 jours)
+  /// Log retention duration (default: 7 days)
   final Duration retentionDuration;
 
-  /// Nom de la base de données (par défaut: tinylogs.db)
+  /// Database name (default: tinylogs.db)
   final String databaseName;
+
+  /// Enable debug prints (default: true in debug mode)
+  /// When false, TinyLogs will not print any debug messages
+  final bool enableLogs;
 
   const TinyLogsConfig({
     this.retentionDuration = const Duration(days: 7),
     this.databaseName = 'tinylogs.db',
+    this.enableLogs = true,
   });
 
   @override
   String toString() {
-    return 'TinyLogsConfig{retentionDuration: $retentionDuration, databaseName: $databaseName}';
+    return 'TinyLogsConfig{retentionDuration: $retentionDuration, databaseName: $databaseName, enableLogs: $enableLogs}';
   }
 }

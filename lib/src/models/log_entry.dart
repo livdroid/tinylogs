@@ -1,52 +1,62 @@
-/// Modèle représentant une entrée de log
+import 'log_level.dart';
+
 class LogEntry {
-  /// Identifiant unique auto-généré
+  /// Unique auto-generated identifier
   final int? id;
 
-  /// Horodatage de la création du log (en millisecondes depuis l'epoch)
+  /// Creation timestamp (in milliseconds since epoch)
   final int timestamp;
 
-  /// Contenu du log (non null)
+  /// Log content (non-null)
   final String content;
+
+  /// Log severity level
+  final LogLevel level;
 
   LogEntry({
     this.id,
     required this.timestamp,
     required this.content,
-  }) : assert(content.isNotEmpty, 'Le contenu ne peut pas être vide');
+    this.level = LogLevel.info,
+  }) : assert(content.isNotEmpty, 'Content cannot be empty');
 
-  /// Crée un LogEntry avec un timestamp automatique
-  factory LogEntry.now(String content) {
+  /// Creates a LogEntry with automatic timestamp
+  factory LogEntry.now(String content, {LogLevel level = LogLevel.info}) {
     return LogEntry(
       timestamp: DateTime.now().millisecondsSinceEpoch,
       content: content,
+      level: level,
     );
   }
 
-  /// Convertit le LogEntry en Map pour SQLite
+  /// Converts the LogEntry to a Map for SQLite
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'timestamp': timestamp,
       'content': content,
+      'level': level.name,
     };
   }
 
-  /// Crée un LogEntry depuis une Map SQLite
+  /// Creates a LogEntry from a SQLite Map
   factory LogEntry.fromMap(Map<String, dynamic> map) {
     return LogEntry(
       id: map['id'] as int?,
       timestamp: map['timestamp'] as int,
       content: map['content'] as String,
+      level: map['level'] != null
+          ? LogLevelExtension.fromString(map['level'] as String)
+          : LogLevel.info,
     );
   }
 
-  /// Retourne la DateTime correspondant au timestamp
+  /// Returns the DateTime corresponding to the timestamp
   DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(timestamp);
 
   @override
   String toString() {
-    return 'LogEntry{id: $id, timestamp: $timestamp (${dateTime.toIso8601String()}), content: $content}';
+    return 'LogEntry{id: $id, level: ${level.displayName}, timestamp: $timestamp (${dateTime.toIso8601String()}), content: $content}';
   }
 
   @override
@@ -56,21 +66,25 @@ class LogEntry {
           runtimeType == other.runtimeType &&
           id == other.id &&
           timestamp == other.timestamp &&
-          content == other.content;
+          content == other.content &&
+          level == other.level;
 
   @override
-  int get hashCode => id.hashCode ^ timestamp.hashCode ^ content.hashCode;
+  int get hashCode =>
+      id.hashCode ^ timestamp.hashCode ^ content.hashCode ^ level.hashCode;
 
-  /// Copie le LogEntry avec des modifications optionnelles
+  /// Copies the LogEntry with optional modifications
   LogEntry copyWith({
     int? id,
     int? timestamp,
     String? content,
+    LogLevel? level,
   }) {
     return LogEntry(
       id: id ?? this.id,
       timestamp: timestamp ?? this.timestamp,
       content: content ?? this.content,
+      level: level ?? this.level,
     );
   }
 }
